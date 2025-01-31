@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import type { ParsedJsonTournament } from "~/types/prizes"
+import {
+  FOOTBALL_MAX_TEAMS,
+  VOLLEYBALL_BASKETBALL_MAX_TEAMS,
+} from "~/misc/constants"
 
 const { tournament } = defineProps<{
   tournament: ParsedJsonTournament
@@ -12,23 +16,16 @@ const { data } = await useFetch(`/api/tournaments/${tournament.id}/teams`)
 const maxTeams = computed(() => {
   switch (tournament.sport) {
     case "Fußball":
-      return 20
+      return FOOTBALL_MAX_TEAMS
     case "Basketball":
     case "Volleyball":
-      return 10
+      return VOLLEYBALL_BASKETBALL_MAX_TEAMS
   }
 })
 
 const isOpenInfo = ref<boolean>(false)
 const items = [
   [
-    {
-      label: "Editieren",
-      icon: "i-heroicons-pencil-square-20-solid",
-      click: () => {
-        console.log("Edit")
-      },
-    },
     {
       label: "Info",
       icon: "i-heroicons-information-circle",

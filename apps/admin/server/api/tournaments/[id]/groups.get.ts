@@ -33,7 +33,7 @@ export default defineEventHandler(async (event) => {
 
   const { data: teams, error: teamError } = await supabase
     .from("team")
-    .select("*, registration(*)")
+    .select("*, registration(*), player(*)")
     .in(
       "group_id",
       groups.map((group) => group.id),

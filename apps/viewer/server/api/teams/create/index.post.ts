@@ -68,7 +68,8 @@ export default defineEventHandler(async (event) => {
   if (!targetGroup) {
     throw createError({
       statusCode: 400,
-      statusMessage: "No available group for this team in the tournament",
+      statusMessage:
+        "No available group for this team in the tournament, the tournament is full.",
     })
   }
 
@@ -94,6 +95,7 @@ export default defineEventHandler(async (event) => {
     first_name: formPlayer.firstName,
     last_name: formPlayer.lastName,
     class: formPlayer.schoolClass.name,
+    note: "",
     team_id: data[0].id,
   }))
 

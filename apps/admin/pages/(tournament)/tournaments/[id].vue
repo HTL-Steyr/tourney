@@ -1,5 +1,12 @@
 <script setup lang="ts">
 import type { ParsedJsonTournament } from "~/types/prizes"
+import {
+  FOOTBALL_MAX_TEAMS,
+  VOLLEYBALL_BASKETBALL_MAX_TEAMS,
+} from "~/misc/constants"
+import { z } from "zod"
+import type { Enums } from "~/types/database.types"
+import type { Group } from "~/types/group"
 
 const title = ref<string>("Turniere")
 useHead({
@@ -22,11 +29,18 @@ const { data } = await useFetch(`/api/tournaments/${tournament.value.id}/teams`)
 const maxTeams = computed(() => {
   switch (tournament.value?.sport) {
     case "Fußball":
-      return 20
+      return FOOTBALL_MAX_TEAMS
     case "Basketball":
     case "Volleyball":
-      return 10
+      return VOLLEYBALL_BASKETBALL_MAX_TEAMS
+    default:
+      return 0
   }
+})
+
+const groupAlert = computed(() => {
+  if (!groups.value || !data.value) return
+  return `Es fehlen noch ${maxTeams.value - data.value.teams} Teams.`
 })
 
 const links = [
@@ -40,7 +54,7 @@ const links = [
   },
 ]
 
-const { data: groups } = await useFetch(
+const { data: groups, refresh: refreshGroups } = await useFetch(
   `/api/tournaments/${tournament.value.id}/groups`,
 )
 
@@ -85,6 +99,168 @@ const refreshTournament = () => {
   refresh()
   displaySuccessNotification("Aktualisiert", "Die Daten wurde aktualisiert.")
 }
+
+const mixGroups = async () => {
+  try {
+    await $fetch(`/api/tournaments/${tournament.value?.id}/mix`)
+    await refreshGroups()
+    isOpenConfirm.value = false
+    displaySuccessNotification(
+      "Erfolgreich",
+      "Die Gruppen wurden neu gemischt.",
+    )
+  } catch (err) {
+    console.error(err)
+    displayFailureNotification(
+      "Fehler",
+      "Die Gruppen konnten nicht gemischt werden.",
+    )
+  }
+}
+
+const timeline = [
+  { label: "Gruppenphase" },
+  { label: "Kreuzspiele" },
+  { label: "Halbfinale" },
+  { label: "Kleines Finale" },
+  { label: "Finale" },
+]
+
+const flowGroups = computed<Group[]>(() => {
+  return (
+    groups.value?.map((group) => ({
+      name: group.name,
+      teams: group.teams.map((team) => team.name),
+    })) ?? []
+  )
+})
+
+const teams = computed(() => {
+  return groups.value
+    ?.flatMap((group) => group.teams)
+    .sort((a, b) => {
+      return a.name.localeCompare(b.name)
+    })
+})
+
+const search = ref<string>("")
+const filteredTeams = computed(() => {
+  return teams.value?.filter((team) => {
+    return team.name.toLowerCase().includes(search.value.toLowerCase())
+  })
+})
+
+const isOpenConfirm = ref<boolean>(false)
+const editPlayerNote = async (id: string, note: string) => {
+  try {
+    await $fetch("/api/players/edit", {
+      method: "PUT",
+      body: { id, note },
+    })
+    await refreshGroups()
+    isOpenConfirm.value = false
+    displaySuccessNotification(
+      "Notiz bearbeitet",
+      "Die Notiz wurde bearbeitet.",
+    )
+  } catch (err) {
+    console.error(err)
+    displayFailureNotification(
+      "Fehler",
+      "Die Notiz konnte nicht bearbeitet werden.",
+    )
+  }
+}
+
+const isOpenDelete = ref<boolean>(false)
+const playerToDeleteId = ref<string>("")
+const onDeleteClick = (id: string) => {
+  playerToDeleteId.value = id
+  isOpenDelete.value = true
+}
+
+const deletePlayer = async () => {
+  try {
+    await $fetch(`/api/players/delete/${playerToDeleteId.value}`, {
+      method: "DELETE",
+    })
+    await refreshGroups()
+    playerToDeleteId.value = ""
+    isOpenDelete.value = false
+    displaySuccessNotification("Gelöscht", "Der Spieler wurde gelöscht.")
+  } catch (err) {
+    console.error(err)
+    displayFailureNotification(
+      "Fehler",
+      "Der Spieler konnte nicht gelöscht werden.",
+    )
+  }
+}
+
+const editSchema = z.object({
+  name: z.string(),
+  rules: z.string(),
+  start_date: z.string().date(),
+  from: z.string().time(),
+  to: z.string().time(),
+  year: z.number(),
+  sport: z.custom<Enums<"sport_type">>(),
+  prizes: z.object({
+    first: z.string(),
+    second: z.string(),
+    third: z.string(),
+    bonus: z.string(),
+  }),
+  thumbnail_path: z.string(),
+  location: z.string(),
+  groups: z.number(),
+  group_teams: z.number(),
+})
+
+const editState = reactive({
+  name: tournament.value.name,
+  rules: tournament.value.rules,
+  start_date: tournament.value.start_date,
+  from: tournament.value.from,
+  to: tournament.value.to,
+  year: tournament.value.year,
+  sport: tournament.value.sport,
+  prizes: {
+    first: tournament.value.prizes?.first ?? "",
+    second: tournament.value.prizes?.second ?? "",
+    third: tournament.value.prizes?.third ?? "",
+    bonus: tournament.value.prizes?.bonus ?? "",
+  },
+  thumbnail_path: tournament.value.thumbnail_path,
+  location: tournament.value.location,
+  groups: tournament.value.groups,
+  group_teams: tournament.value.group_teams,
+})
+
+const isOpenEdit = ref<boolean>(false)
+const onSubmitEdit = async () => {
+  try {
+    await $fetch("/api/tournaments/edit", {
+      method: "PUT",
+      body: {
+        id: tournament.value?.id,
+        tournament: editState,
+      },
+    })
+    isOpenEdit.value = false
+    await refresh()
+    displaySuccessNotification(
+      "Turnier bearbeitet",
+      "Das Turnier wurde erfolgreich bearbeitet.",
+    )
+  } catch (err) {
+    console.error(err)
+    displayFailureNotification(
+      "Fehler beim Bearbeiten",
+      "Das Turnier konnte nicht bearbeitet werden.",
+    )
+  }
+}
 </script>
 
 <template>
@@ -92,10 +268,7 @@ const refreshTournament = () => {
     <ToolbarContainer class="flex w-full items-center justify-between">
       <div class="flex items-center gap-2">
         <UBreadcrumb :links="links" />
-        <TournamentLiveDisplay
-          v-if="tournament"
-          :is-live="tournament.is_live"
-        />
+        <TournamentLiveDisplay v-if="tournament" :is-live="isTournamentLive" />
       </div>
       <div class="flex items-center space-x-2">
         <UButton
@@ -106,18 +279,32 @@ const refreshTournament = () => {
           @click="refreshTournament"
         />
         <UButton
+          v-if="!isTournamentLive"
           icon="i-heroicons-pencil-square"
           label="Bearbeiten"
           color="gray"
           size="xs"
           square
+          @click="isOpenEdit = true"
         />
+        <ModalEdit
+          v-model="isOpenEdit"
+          @edit="onSubmitEdit"
+          modal-width="sm:max-w-4xl"
+        >
+          <TournamentForm :schema="editSchema" :state="editState" />
+        </ModalEdit>
+        <ModalConfirm v-model="isOpenConfirm" @confirm="mixGroups">
+          <p>Möchtest du die Gruppen neu mischen?</p>
+        </ModalConfirm>
         <UButton
           v-if="!tournament?.is_live"
           label="Gruppen neu mischen..."
           icon="i-heroicons-table-cells"
           variant="soft"
+          color="yellow"
           size="xs"
+          @click="isOpenConfirm = true"
         />
         <UButton
           :label="liveLabel"
@@ -128,6 +315,9 @@ const refreshTournament = () => {
           @click="isOpenLive = true"
         />
         <ModalLive v-model="isOpenLive" @live="onSetLive" />
+        <ModalDelete v-model="isOpenDelete" @delete="deletePlayer()">
+          <p>Möchtest du diesen Schüler wirklich vom Team entfernen?</p>
+        </ModalDelete>
       </div>
     </ToolbarContainer>
   </BasePageHeader>
@@ -179,6 +369,10 @@ const refreshTournament = () => {
           </div>
           <div class="rounded-md bg-gray-50 p-3 pr-3 text-sm dark:bg-gray-800">
             <div class="flex items-center space-x-1">
+              <UIcon name="i-heroicons-ticket" />
+              <p>{{ tournament?.sport }}</p>
+            </div>
+            <div class="flex items-center space-x-1">
               <UIcon name="i-heroicons-user-group" />
               <p>{{ tournament?.groups }} Gruppen</p>
             </div>
@@ -189,9 +383,17 @@ const refreshTournament = () => {
           </div>
         </div>
         <div class="flex h-full w-full flex-col gap-3 p-6">
+          <strong>Ablauf</strong>
+          <UBreadcrumb :links="timeline" divider="i-heroicons-arrow-long-right">
+            <template #default="{ link }">
+              <UBadge color="gray" class="truncate rounded-full">
+                {{ link.label }}
+              </UBadge>
+            </template>
+          </UBreadcrumb>
           <strong>Gruppen</strong>
           <div
-            class="overflow-hidden rounded-md border border-gray-300 dark:border-gray-700"
+            class="shrink-0 overflow-hidden rounded-md border border-gray-300 dark:border-gray-700"
           >
             <table class="w-full table-auto border-separate border-spacing-0">
               <thead>
@@ -244,12 +446,96 @@ const refreshTournament = () => {
               </tbody>
             </table>
           </div>
-          <strong>Teams</strong>
+          <div>
+            <UAlert
+              v-if="maxTeams !== data?.teams"
+              icon="i-heroicons-exclamation-triangle"
+              color="red"
+              variant="soft"
+              title="Gruppen unvollständig"
+              :description="groupAlert"
+            />
+          </div>
+          <div class="flex w-full justify-between">
+            <strong>Teams</strong>
+            <SearchInput v-model="search" placeholder="Suche nach Teams..." />
+          </div>
+          <div class="flex flex-col gap-3 pb-24">
+            <template v-if="filteredTeams?.length">
+              <div
+                v-for="team in filteredTeams"
+                class="flex flex-col gap-1 rounded-md border border-gray-300 p-3 dark:border-gray-700"
+              >
+                <strong>{{ team.name }}</strong>
+                <template v-if="team.player.length > 0">
+                  <div
+                    v-for="player in team.player"
+                    class="flex gap-1 rounded-md bg-gray-100 p-3 pr-3 dark:bg-gray-800"
+                  >
+                    <UFormGroup label="Vorname">
+                      <UInput v-model="player.first_name" disabled />
+                    </UFormGroup>
+                    <UFormGroup label="Nachname">
+                      <UInput v-model="player.last_name" disabled />
+                    </UFormGroup>
+                    <UFormGroup label="Klasse">
+                      <UInput v-model="player.class" class="w-20" disabled />
+                    </UFormGroup>
+                    <UFormGroup label="Notiz">
+                      <UInput v-model="player.note" />
+                    </UFormGroup>
+                    <div class="flex h-full gap-1">
+                      <div class="self-end">
+                        <UButton
+                          icon="i-heroicons-pencil"
+                          color="gray"
+                          size="sm"
+                          square
+                          @click="editPlayerNote(player.id, player.note)"
+                        />
+                      </div>
+                      <div class="self-end" v-if="!isTournamentLive">
+                        <UButton
+                          icon="i-heroicons-x-mark"
+                          color="red"
+                          variant="soft"
+                          size="sm"
+                          square
+                          @click="onDeleteClick(player.id)"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </template>
+                <template v-else>
+                  <UAlert
+                    icon="i-heroicons-exclamation-triangle"
+                    color="red"
+                    variant="soft"
+                    title="Keine Spieler"
+                    description="Dieses Team hat keine Spieler!"
+                  />
+                </template>
+              </div>
+            </template>
+            <template v-else>
+              <UAlert
+                icon="i-heroicons-information-circle"
+                color="primary"
+                variant="soft"
+                title="Keine Teams"
+                description="Dieses Turnier hat noch keine Teams. Wurden Anmeldungen schon erstellt und verschickt?"
+              />
+            </template>
+          </div>
         </div>
       </div>
       <div class="w-1/2">
         <ClientOnly>
-          <TournamentFlow />
+          <TournamentFlow
+            :groups="flowGroups"
+            :key="JSON.stringify(flowGroups)"
+          />
           <template #fallback>
             <div
               class="flex h-full w-full items-center justify-center bg-gray-100 dark:bg-gray-800"

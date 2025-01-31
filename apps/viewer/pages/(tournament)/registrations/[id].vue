@@ -5,6 +5,7 @@ import type { FormPlayer } from "~/types/form"
 import { formLocked } from "~/keys/isFormLocked"
 import { classMixing } from "~/keys/allowClassMixing"
 import type { RegistrationWithClass } from "~/types/registration"
+import displayFailureNotification from "~/utils/displayFailureNotification"
 
 useHead({
   title: "Anmeldung",
@@ -160,16 +161,22 @@ const submit = async () => {
     registration: registration.value,
   }
 
-  await $fetch("/api/teams/create", {
-    method: "POST",
-    body: payload,
-  })
-
-  await refresh()
-
-  setTimeout(() => {
-    window.scrollBy(0, 512)
-  }, 500)
+  try {
+    await $fetch("/api/teams/create", {
+      method: "POST",
+      body: payload,
+    })
+    await refresh()
+    setTimeout(() => {
+      window.scrollBy(0, 512)
+    }, 500)
+  } catch (error) {
+    const err = error as Error
+    displayFailureNotification("Fehler beim Anmelden", err.message)
+    throw createError({
+      statusMessage: err.message,
+    })
+  }
 }
 </script>
 

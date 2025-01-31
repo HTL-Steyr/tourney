@@ -1,0 +1,2 @@
+export const FOOTBALL_MAX_TEAMS = 20
+export const VOLLEYBALL_BASKETBALL_MAX_TEAMS = 10
