@@ -11,7 +11,7 @@
     "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/logo.svg"
   },
   "dependencies": {
-    "@nuxt/content": "2.13.4",
+    "@nuxt/content": "3.0.1",
     "@vite-pwa/nuxt": "0.10.6",
     "handlebars": "^4.7.8",
     "nuxt": "^3.13.1",
