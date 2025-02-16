@@ -26,7 +26,7 @@
     "@dicebear/collection": "^9.2.2",
     "@dicebear/core": "^9.2.1",
     "@iconify-json/heroicons": "^1.2.2",
-    "@nuxtjs/supabase": "1.4.0",
+    "@nuxtjs/supabase": "1.4.6",
     "@supabase/supabase-js": "^2.45.4",
     "@vueuse/core": "^12.4.0",
     "@vueuse/nuxt": "^12.2.0",
