@@ -29,7 +29,7 @@
     "@dicebear/collection": "^9.2.2",
     "@dicebear/core": "^9.2.1",
     "@iconify-json/heroicons": "^1.2.2",
-    "@iconify-json/material-symbols": "^1.2.15",
+    "@iconify-json/material-symbols": "^1.2.17",
     "@nuxtjs/supabase": "1.4.0",
     "@supabase/supabase-js": "^2.45.4",
     "@vueuse/core": "^12.4.0",
