@@ -23,7 +23,7 @@
     "nuxt-monaco-editor": "1.3.1",
     "vue": "3.5.13",
     "vue-router": "4.5.0",
-    "zod": "^3.23.8"
+    "zod": "^3.25.45"
   },
   "devDependencies": {
     "@dicebear/collection": "^9.2.2",
