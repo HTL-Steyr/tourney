@@ -33,7 +33,7 @@
     "@nuxtjs/supabase": "1.5.0",
     "@supabase/supabase-js": "^2.49.4",
     "@vueuse/core": "^13.0.0",
-    "@vueuse/nuxt": "^13.0.0",
+    "@vueuse/nuxt": "^13.3.0",
     "vue-tsc": "2.2.4"
   }
 }
