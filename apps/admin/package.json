@@ -14,7 +14,7 @@
     "check-types": "vue-tsc --noEmit"
   },
   "dependencies": {
-    "@dicebear/collection": "^9.2.2",
+    "@dicebear/collection": "^9.2.3",
     "@dicebear/core": "^9.2.1",
     "@iconify-json/heroicons": "^1.2.2",
     "@iconify-json/svg-spinners": "^1.2.2",
