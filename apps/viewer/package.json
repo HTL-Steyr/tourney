@@ -26,7 +26,7 @@
     "@vue-flow/controls": "^1.1.2",
     "@vue-flow/core": "^1.45.0",
     "@vue-flow/minimap": "^1.5.2",
-    "@vueuse/core": "^13.4.0",
+    "@vueuse/core": "^13.6.0",
     "@vueuse/nuxt": "^13.4.0",
     "handlebars": "^4.7.8",
     "nuxt": "3.17.7",
