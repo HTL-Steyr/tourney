@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@tourney/types": "workspace:*",
-    "@types/k6": "^0.54.2",
+    "@types/k6": "^1.2.0",
     "@vite-pwa/assets-generator": "^1.0.0",
     "vue-tsc": "3.0.5"
   }
