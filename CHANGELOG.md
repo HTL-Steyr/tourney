@@ -3,11 +3,10 @@
 
 ### Features
 
-* update README.md ([017b133](https://github.com/HTL-Steyr/tourney/commit/017b133b74255ffd15ca7cc1068aa26731da48d9))
-* update README.md and .env.example ([181d1f8](https://github.com/HTL-Steyr/tourney/commit/181d1f8004b2e46f62accc791fe3e1bcec95782d))
+- update README.md ([017b133](https://github.com/HTL-Steyr/tourney/commit/017b133b74255ffd15ca7cc1068aa26731da48d9))
+- update README.md and .env.example ([181d1f8](https://github.com/HTL-Steyr/tourney/commit/181d1f8004b2e46f62accc791fe3e1bcec95782d))
 
 # [0.40.0](https://github.com/HTL-Steyr/tourney/compare/v0.39.0...v0.40.0) (2026-03-14)
-
 
 ### Features
 

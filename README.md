@@ -7,19 +7,20 @@
 [![Instagram](https://img.shields.io/badge/Instagram-E1306C?logo=instagram&logoColor=white)](https://www.instagram.com/htlsteyr/)
 [![Website](https://img.shields.io/website?url=https%3A%2F%2Fwww.htl-steyr.ac.at&up_message=htl-steyr.ac.at&logo=google-chrome&logoColor=white)](https://www.htl-steyr.ac.at/)
 
-# tourney
+# Tourney
 
-Mono repository for the tourney project. This project is a web application for managing tournaments.
+Tourney is a comprehensive tournament management system designed to streamline the organization and execution of sports tournaments.
+It provides a user-friendly interface for administrators to set up and manage tournaments, while also offering a live viewer experience for spectators to stay updated on matches, brackets, and standings in real-time.
 
-### ⚽️ Features
+### Features
 
-- 🏆 tournament setup for football, volleyball, and basketball with rules, time windows, prizes, and automatic group assignment
-- 📡 live control for group stages, active matches, and score updates during the event
-- 🎓 class and school year management as the base for team and registration logic
-- 🎟️ central registration management with registration links, teams, and status handling
-- 📰 news and gallery management directly from the admin dashboard
-- 🌳 public tournament details, live brackets, standings, and media updates in the viewer
-- 🤖 AI assistant for tournament setup and management suggestions in the admin dashboard
+- 🏆 Tournament setup for football, volleyball, and basketball with rules, prizes, and automatic group assignment
+- 📡 Live viewer with real-time updates on matches, brackets and standings
+- 🎓 Class and school year management
+- 🎟️ Central registration management with registration links, teams, pdf generation and status handling
+- 📰 News and gallery management directly from the admin dashboard
+- 🌳 Public tournament details, live brackets, standings, and media updates
+- 🤖 AI assistant
 
 ### Live Deployment
 
@@ -105,7 +106,7 @@ Create a `.env` file and checkout the `.env.example`.
 Copy the content into your `.env` and replace the following fields with your own.
 
 | Field                    | Description                                            |
-|--------------------------|--------------------------------------------------------|
+| ------------------------ | ------------------------------------------------------ |
 | `SUPABASE_URL`           | URL to Supabase API                                    |
 | `SUPABASE_KEY`           | Anon key                                               |
 | `SUPABASE_SECRET_KEY`    | Secret key (service-level key)                         |
@@ -129,7 +130,7 @@ If it works, great!
 Create a `.env` file and checkout the `.env.example`. Copy the content into your `.env` and replace the following fields
 
 | Field                     | Description                  |
-|---------------------------|------------------------------|
+| ------------------------- | ---------------------------- |
 | `SUPABASE_URL`            | URL to Supabase API          |
 | `SUPABASE_KEY`            | Anon key                     |
 | `NUXT_GOTENBERG_URL`      | URL to the Gotenberg service |
@@ -153,12 +154,12 @@ If it works, great!
 Create a `.env` file and checkout the `.env.example`. Copy the content into your `.env` and replace the following fields
 
 | Field                              | Description           |
-|------------------------------------|-----------------------|
+| ---------------------------------- | --------------------- | --- |
 | `SUPABASE_URL`                     | URL to Supabase API   |
 | `SUPABASE_KEY`                     | Anon key              |
 | `NUXT_PUBLIC_ADMIN_APP_URL`        | URL of the admin app  |
 | `NUXT_PUBLIC_VIEWER_APP_URL`       | URL of the viewer app |
-| `NUXT_PUBLIC_MUX_DEMO_PLAYBACK_ID` | URL of mux asset id   |                       |
+| `NUXT_PUBLIC_MUX_DEMO_PLAYBACK_ID` | URL of mux asset id   |     |
 
 2. run dev server
 
@@ -177,7 +178,7 @@ If it works, great!
 Create a `.env` file and checkout the `.env.example`. Copy the content into your `.env` and replace the following fields
 
 | Field                 | Description                    |
-|-----------------------|--------------------------------|
+| --------------------- | ------------------------------ |
 | `SUPABASE_URL`        | URL to Supabase API            |
 | `SUPABASE_SECRET_KEY` | Secret key (service-level key) |
 | `USERS_TO_CREATE`     | See comment in `.env.example`  |

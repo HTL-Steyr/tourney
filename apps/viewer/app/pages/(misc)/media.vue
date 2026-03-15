@@ -31,7 +31,7 @@ const content = computed(() => data.value ?? "")
     <PageHeader title="Medien" description="Aktuelles und Galerie" />
 
     <section
-      class="my-3 overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm"
+      class="my-3 overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm dark:border-neutral-700 dark:bg-neutral-900"
     >
       <div
         v-if="status === 'pending'"
@@ -110,10 +110,19 @@ const content = computed(() => data.value ?? "")
   text-underline-offset: 2px;
 }
 
+.dark .media-content :deep(a) {
+  color: rgb(96 165 250);
+}
+
 .media-content :deep(blockquote) {
   border-left: 3px solid rgb(212 212 212);
   padding-left: 1rem;
   color: rgb(82 82 82);
+}
+
+.dark .media-content :deep(blockquote) {
+  border-left-color: rgb(82 82 82);
+  color: rgb(163 163 163);
 }
 
 .media-content :deep(code) {
@@ -123,11 +132,19 @@ const content = computed(() => data.value ?? "")
   font-size: 0.875rem;
 }
 
+.dark .media-content :deep(code) {
+  background: rgb(38 38 38);
+}
+
 .media-content :deep(pre) {
   overflow-x: auto;
   border-radius: 0.75rem;
   background: rgb(245 245 245);
   padding: 1rem;
+}
+
+.dark .media-content :deep(pre) {
+  background: rgb(38 38 38);
 }
 
 .media-content :deep(pre code) {
@@ -142,5 +159,9 @@ const content = computed(() => data.value ?? "")
 .media-content :deep(hr) {
   margin: 1.5rem 0;
   border-color: rgb(229 229 229);
+}
+
+.dark .media-content :deep(hr) {
+  border-color: rgb(64 64 64);
 }
 </style>

@@ -84,7 +84,7 @@
       "name": "@tourney/www",
       "dependencies": {
         "@iconify-json/heroicons": "catalog:ui",
-        "@mux/mux-player": "^3.11.5",
+        "@mux/mux-player": "catalog:ui",
         "nuxt": "catalog:framework",
         "vue": "catalog:framework",
         "vue-router": "catalog:framework",
@@ -172,6 +172,7 @@
     "ui": {
       "@iconify-json/heroicons": "^1.2.3",
       "@iconify-json/svg-spinners": "^1.2.4",
+      "@mux/mux-player": "^3.11.5",
       "@nuxt/fonts": "^0.14.0",
       "@nuxt/image": "^2.0.0",
       "@nuxt/ui": "^4.0.0",

@@ -6,22 +6,35 @@ definePageMeta({
 })
 
 const {
-  public: { adminAppUrl, viewerAppUrl, muxDemoPlaybackId },
+  public: { siteUrl, adminAppUrl, viewerAppUrl, muxDemoPlaybackId },
 } = useRuntimeConfig()
 
 const demoVideoPlaybackId = computed(() => muxDemoPlaybackId.trim())
 
+const description =
+  "Die Plattform, die komplexe Brackets verwaltet, maßgeschneiderte Spielpläne entwirft und die Organisation übernimmt, während sich dein Team auf alles andere konzentriert."
+
 useSeoMeta({
-  title: "Tourney - Tournament Management on Autopilot",
-  description:
-    "The platform that automatically manages brackets, crafts custom schedules, and runs events while your team does anything else.",
-  ogTitle: "Tourney - Tournament Management on Autopilot",
-  ogDescription:
-    "The platform that automatically manages brackets, crafts custom schedules, and runs events while your team does anything else.",
+  title: "Tourney",
+  description,
+  ogTitle: "Tourney - Turniere veranstalten. Ohne das Chaos.",
+  ogDescription: description,
+  ogType: "website",
+  ogUrl: siteUrl,
+  ogImage: `${siteUrl}/ogImage.jpg`,
+  ogImageWidth: 1200,
+  ogImageHeight: 630,
+  ogImageAlt: "Tourney – Turnierplattform",
+  ogLocale: "de_AT",
   twitterCard: "summary_large_image",
+  twitterTitle: "Tourney – Turniere veranstalten. Ohne das Chaos.",
+  twitterDescription: description,
+  twitterImage: `${siteUrl}/ogImage.jpg`,
+  robots: "index, follow",
 })
 
 useHead({
+  link: [{ rel: "canonical", href: siteUrl }],
   script: [
     {
       src: "https://cdn.jsdelivr.net/npm/@mux/mux-player",
@@ -108,21 +121,20 @@ const features = ref<PageFeatureProps[]>([
   {
     title: "Turnierdetails für alle",
     description:
-      "Alle Turniere mit Datum, Ort, Regeln und Preisen sind im Viewer öffentlich verfügbar.",
+      "Alle Turniere mit Datum, Ort, Regeln und Preisen sind im Viewer öffentlich und ohne Login zugänglich.",
     icon: "i-lucide-calendar-days",
     to: `${viewerAppUrl}/tournaments`,
   },
   {
     title: "Live-Flow und Tabellen",
     description:
-      "Der Turnierbaum, laufende Matches und Gruppenstände werden automatisch aktualisiert.",
+      "Turnierbaum, laufende Matches und Gruppenstände werden in Echtzeit aktualisiert.",
     icon: "i-lucide-git-branch-plus",
     to: `${viewerAppUrl}/live`,
   },
   {
     title: "Medien und Updates",
-    description:
-      "News und Bilder lassen sich im Admin pflegen und direkt im Viewer veröffentlichen.",
+    description: "Neuigkeiten schreiben, Bilder hochladen und veröffentlichen.",
     icon: "i-lucide-images",
     to: `${viewerAppUrl}/media`,
   },
@@ -131,11 +143,35 @@ const features = ref<PageFeatureProps[]>([
 
 <template>
   <UPage>
+    <header class="flex w-full justify-between p-4 pb-2">
+      <div class="flex items-center gap-3 font-mono">
+        <NuxtLink to="https://dino-kupinic.dev" target="_blank">
+          <NuxtImg
+            src="/logo_dk.png"
+            alt="dino-kupinic.dev logo"
+            width="32"
+            height="32"
+          />
+        </NuxtLink>
+        <p>/</p>
+        <NuxtLink to="https://dino-kupinic.dev/project/tourney" target="_blank">
+          <strong class="hover:text-primary tracking-tight">Tourney</strong>
+        </NuxtLink>
+      </div>
+      <NuxtLink to="https://dino-kupinic.dev" target="_blank">
+        <div class="hidden space-x-3 sm:block">
+          <span>Mehr auf</span>
+          <span class="text-primary border p-1">
+            ★ www.dino-kupinic.dev ★
+          </span>
+        </div>
+      </NuxtLink>
+    </header>
     <main class="relative overflow-hidden pt-32 pb-24 md:pt-40">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="max-w-3xl">
           <h1
-            class="mb-6 text-3xl leading-tight font-bold tracking-tighter text-neutral-900 sm:font-semibold md:text-7xl"
+            class="mb-6 text-4xl leading-tight font-bold tracking-tighter text-neutral-900 md:text-7xl"
           >
             Turniere veranstalten. <br />
             Ohne das Chaos.
@@ -206,37 +242,34 @@ const features = ref<PageFeatureProps[]>([
           </UPageGrid>
         </div>
 
-        <div class="mt-32">
-          <UPageSection
-            title="Alles für den Turniertag"
-            description="Vom Anmeldeprozess bis zur Live-Auswertung arbeiten Admin und Viewer in einer gemeinsamen Plattform zusammen."
-            icon="i-lucide-layout-dashboard"
-            orientation="horizontal"
-            :features="features"
-          >
-            <div class="w-full">
-              <NuxtImg
-                src="/football.jpg"
-                width="600"
-                height="700"
-                alt="Fußballspieler bei einem Turnier"
-                class="w-full rounded-lg"
-                loading="lazy"
-              />
-              <p class="mt-2 text-right text-xs text-neutral-500">
-                Bildquelle:
-                <NuxtLink
-                  to="https://www.freepik.com"
-                  external
-                  target="_blank"
-                  class="underline underline-offset-2"
-                >
-                  freepik.com
-                </NuxtLink>
-              </p>
-            </div>
-          </UPageSection>
-        </div>
+        <UPageSection
+          title="Alles für den Turniertag"
+          description="Vom Anmeldeprozess bis zur Live-Auswertung alles in einer gemeinsamen Plattform."
+          orientation="horizontal"
+          :features="features"
+        >
+          <div class="w-full">
+            <NuxtImg
+              src="/football.jpg"
+              width="600"
+              height="700"
+              alt="Fußballspieler bei einem Turnier"
+              class="w-full rounded-2xl shadow-md"
+              loading="lazy"
+            />
+            <p class="mt-2 text-right text-xs text-neutral-400">
+              Bildquelle:
+              <NuxtLink
+                to="https://www.freepik.com"
+                external
+                target="_blank"
+                class="underline underline-offset-2 hover:text-neutral-600"
+              >
+                freepik.com
+              </NuxtLink>
+            </p>
+          </div>
+        </UPageSection>
 
         <div
           class="relative my-32 overflow-hidden rounded-[3rem] bg-neutral-900 px-6 py-20 text-center text-white lg:py-24"

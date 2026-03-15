@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@iconify-json/heroicons": "catalog:ui",
-    "@mux/mux-player": "^3.11.5",
+    "@mux/mux-player": "catalog:ui",
     "nuxt": "catalog:framework",
     "vue": "catalog:framework",
     "vue-router": "catalog:framework"

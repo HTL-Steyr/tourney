@@ -10,6 +10,8 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
+      siteUrl:
+        process.env.NUXT_PUBLIC_SITE_URL ?? "https://tourney.dino-kupinic.dev",
       adminAppUrl:
         process.env.NUXT_PUBLIC_ADMIN_APP_URL ??
         "https://tourney-admin.dino-kupinic.dev",
