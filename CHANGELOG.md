@@ -1,3 +1,15 @@
+# [0.42.0](https://github.com/HTL-Steyr/tourney/compare/v0.41.0...v0.42.0) (2026-03-15)
+
+
+### Bug Fixes
+
+* typo ([d0d3862](https://github.com/HTL-Steyr/tourney/commit/d0d3862d2fd70a2316a632ae4aa1db9d47a09d3f))
+
+
+### Features
+
+* better SEO, small fixes and add header for www ([804bc77](https://github.com/HTL-Steyr/tourney/commit/804bc77bb91e4f15596e8ab18a5e3848a9f8faf4))
+
 # [0.41.0](https://github.com/HTL-Steyr/tourney/compare/v0.40.0...v0.41.0) (2026-03-14)
 
 
