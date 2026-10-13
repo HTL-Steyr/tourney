@@ -18,6 +18,8 @@ const { data: tournamentData, refresh } = await useFetch<TournamentPhases>(
   `/api/tournaments/${tournamentId}/phases`,
 )
 
+defineExpose({ refresh })
+
 const supabase = useSupabaseClient()
 supabase
   .channel("channel-match")
