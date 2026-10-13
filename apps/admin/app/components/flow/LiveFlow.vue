@@ -15,7 +15,7 @@ const { tournamentId } = defineProps<{
 }>()
 
 const { data: tournamentData, refresh } = await useFetch<TournamentPhases>(
-  `/api/tournaments/${tournamentId}/phases`,
+  () => `/api/tournaments/${tournamentId}/phases`,
 )
 
 defineExpose({ refresh })
