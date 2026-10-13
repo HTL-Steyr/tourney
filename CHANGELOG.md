@@ -1,3 +1,10 @@
+# [0.43.0](https://github.com/HTL-Steyr/tourney/compare/v0.42.0...v0.43.0) (2026-10-13)
+
+
+### Features
+
+* **viewer:** celebrate successful signup with confetti ([0694b19](https://github.com/HTL-Steyr/tourney/commit/0694b194173c15c864504b33f6c28a28ce7d3b5d))
+
 # [0.42.0](https://github.com/HTL-Steyr/tourney/compare/v0.41.0...v0.42.0) (2026-03-15)
 
 
