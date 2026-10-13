@@ -1,3 +1,11 @@
+## [0.43.3](https://github.com/HTL-Steyr/tourney/compare/v0.43.2...v0.43.3) (2026-10-13)
+
+
+### Bug Fixes
+
+* **database:** cascade class deletion through team matches ([51d27da](https://github.com/HTL-Steyr/tourney/commit/51d27da3f2c5904f2cf6989b83f80b49f8d171aa))
+* **viewer:** refresh grouped standings and clean up realtime channels ([ef64396](https://github.com/HTL-Steyr/tourney/commit/ef6439652734c608e837beb04ce1a2ed7a352cb6))
+
 ## [0.43.2](https://github.com/HTL-Steyr/tourney/compare/v0.43.1...v0.43.2) (2026-10-13)
 
 
