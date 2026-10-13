@@ -21,6 +21,7 @@
   "dependencies": {
     "@iconify-json/heroicons": "catalog:ui",
     "@iconify-json/svg-spinners": "catalog:ui",
+    "@nuxt/scripts": "catalog:framework",
     "@nuxtjs/device": "catalog:framework",
     "@nuxtjs/supabase": "catalog:data",
     "@supabase/supabase-js": "catalog:data",
