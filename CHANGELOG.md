@@ -1,3 +1,11 @@
+## [0.43.4](https://github.com/HTL-Steyr/tourney/compare/v0.43.3...v0.43.4) (2026-10-13)
+
+
+### Bug Fixes
+
+* **admin:** refresh bracket when switching live tournaments ([e54f3fe](https://github.com/HTL-Steyr/tourney/commit/e54f3fe323843611930a1e6b6325dafe48dac45e))
+* **admin:** refresh live navigation count after status changes ([eb4e3af](https://github.com/HTL-Steyr/tourney/commit/eb4e3af50a5942e0a3f5ffba7975c49f6e0b42b2))
+
 ## [0.43.3](https://github.com/HTL-Steyr/tourney/compare/v0.43.2...v0.43.3) (2026-10-13)
 
 
