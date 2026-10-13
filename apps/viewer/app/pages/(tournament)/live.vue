@@ -90,7 +90,9 @@ const { data: matches, refresh: matchRefresh } = await useAsyncData<Match[]>(
   },
 )
 
-const { data: groups } = await useAsyncData<TournamentGroup[]>(
+const { data: groups, refresh: groupsRefresh } = await useAsyncData<
+  TournamentGroup[]
+>(
   "viewer-live-groups",
   async () => {
     if (!tournamentId.value) {
@@ -144,32 +146,33 @@ function normalizeGroupStanding(standing: GroupStanding): Standing {
   }
 }
 
-const { data: groupedStandings } = await useAsyncData<GroupStandingsSection[]>(
-  "viewer-live-grouped-standings",
-  async () => {
-    if (!groups.value?.length) {
-      return []
-    }
+const { data: groupedStandings, refresh: groupedStandingsRefresh } =
+  await useAsyncData<GroupStandingsSection[]>(
+    "viewer-live-grouped-standings",
+    async () => {
+      if (!groups.value?.length) {
+        return []
+      }
 
-    return await Promise.all(
-      groups.value.map(async (group) => {
-        const standings = await $fetch<GroupStanding[]>(
-          `/api/views/standings/group/${group.id}` as string,
-        )
+      return await Promise.all(
+        groups.value.map(async (group) => {
+          const standings = await $fetch<GroupStanding[]>(
+            `/api/views/standings/group/${group.id}` as string,
+          )
 
-        return {
-          id: group.id,
-          name: group.name,
-          standings: (standings ?? []).map(normalizeGroupStanding),
-        }
-      }),
-    )
-  },
-  {
-    default: () => [],
-    watch: [groupIds],
-  },
-)
+          return {
+            id: group.id,
+            name: group.name,
+            standings: (standings ?? []).map(normalizeGroupStanding),
+          }
+        }),
+      )
+    },
+    {
+      default: () => [],
+      watch: [groupIds],
+    },
+  )
 
 const { data: liveMatches, refresh: refreshLiveMatches } = await useAsyncData<
   Match[]
@@ -192,31 +195,41 @@ const { data: liveMatches, refresh: refreshLiveMatches } = await useAsyncData<
 
 const refresh = async () => {
   await tournamentRefresh()
+  await groupsRefresh()
   await matchRefresh()
   await refreshLiveMatches()
   await fullStandingsRefresh()
+  await groupedStandingsRefresh()
   await refreshResults()
   await refreshHistory()
 }
 
 const supabase = useSupabaseClient()
-supabase
-  .channel("channel-match")
-  .on(
-    "postgres_changes",
-    { event: "*", schema: "public", table: "match" },
-    async () => {
-      await refresh()
-    },
-  )
-  .on(
-    "postgres_changes",
-    { event: "*", schema: "public", table: "result" },
-    async () => {
-      await refresh()
-    },
-  )
-  .subscribe()
+const channelName = `viewer-live-${useId()}`
+let channel: ReturnType<typeof supabase.channel> | undefined
+onMounted(() => {
+  channel = supabase
+    .channel(channelName)
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "match" },
+      async () => {
+        await refresh()
+      },
+    )
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "result" },
+      async () => {
+        await refresh()
+      },
+    )
+    .subscribe()
+})
+
+onBeforeUnmount(() => {
+  if (channel) void supabase.removeChannel(channel)
+})
 
 const { data: history, refresh: refreshHistory } = await useAsyncData<
   HistoryItem[]
