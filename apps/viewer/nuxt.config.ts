@@ -9,7 +9,12 @@ export default defineNuxtConfig({
     gotenbergUsername: "",
     gotenbergPassword: "",
   },
-  modules: ["@nuxtjs/device", "@vueuse/nuxt", "@vite-pwa/nuxt"],
+  modules: [
+    "@nuxtjs/device",
+    "@vueuse/nuxt",
+    "@vite-pwa/nuxt",
+    "@nuxt/scripts",
+  ],
   supabase: {
     redirect: false,
     types: "~~/types/database.types.ts",

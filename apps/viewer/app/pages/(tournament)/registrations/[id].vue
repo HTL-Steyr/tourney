@@ -166,6 +166,7 @@ const playerCount = computed(() => {
 
 const formRef = useTemplateRef("formRef")
 const isSubmitting = ref(false)
+const celebrateSignup = useSignupConfetti()
 
 const submit = async () => {
   if (isSubmitting.value) {
@@ -193,6 +194,7 @@ const submit = async () => {
       method: "POST",
       body: payload,
     })
+    void celebrateSignup()
     await refresh()
     setTimeout(() => {
       window.scrollBy(0, 512)
