@@ -8,13 +8,13 @@ export const useLiveTournaments = () => {
   )
 
   const fetchLiveTournaments = async () => {
-    const { data } = await useFetch("/api/tournaments/live/count")
-    liveTournaments.value = data.value ?? 0
+    liveTournaments.value = await $fetch<number>("/api/tournaments/live/count")
   }
 
   const fetchTournaments = async () => {
-    const { data } = await useFetch("/api/tournaments/live")
-    tournaments.value = data.value ?? []
+    tournaments.value = await $fetch<Tables<"tournament">[]>(
+      "/api/tournaments/live",
+    )
   }
 
   return {

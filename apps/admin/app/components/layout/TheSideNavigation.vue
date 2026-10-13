@@ -12,7 +12,6 @@ const svg = computed(() =>
     seed: name.value,
   }).toDataUri(),
 )
-// TODO: make navbar rerender on live tournament change
 const { liveTournaments, fetchLiveTournaments } = useLiveTournaments()
 await fetchLiveTournaments()
 
