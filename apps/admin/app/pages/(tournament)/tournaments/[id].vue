@@ -483,6 +483,7 @@ const resetEditState = () => {
 }
 
 const isOpenEdit = ref<boolean>(false)
+const liveFlow = useTemplateRef<{ refresh: () => Promise<void> }>("liveFlow")
 watch(isOpenEdit, (isOpen) => {
   if (isOpen) return
 
@@ -509,6 +510,9 @@ const onSubmitEdit = async () => {
       },
     })
     await tournamentRefresh()
+    await refreshGroups()
+    await teamsRefresh()
+    await liveFlow.value?.refresh()
     resetEditState()
     isOpenEdit.value = false
     displaySuccessNotification(
@@ -519,7 +523,8 @@ const onSubmitEdit = async () => {
     console.error(err)
     displayFailureNotification(
       "Fehler beim Bearbeiten",
-      "Das Turnier konnte nicht bearbeitet werden.",
+      (err as { data?: { message?: string } }).data?.message ??
+        "Das Turnier konnte nicht bearbeitet werden.",
     )
   }
 }
@@ -1286,7 +1291,7 @@ const canGoLive = computed(() => {
       </div>
       <div class="w-1/2 2xl:w-3/5">
         <ClientOnly>
-          <LiveFlow :tournament-id="tournament?.id as string" />
+          <LiveFlow ref="liveFlow" :tournament-id="tournament?.id as string" />
           <template #fallback>
             <div
               class="flex h-full w-full items-center justify-center bg-neutral-100 dark:bg-neutral-800"
