@@ -1,3 +1,10 @@
+## [0.43.2](https://github.com/HTL-Steyr/tourney/compare/v0.43.1...v0.43.2) (2026-10-13)
+
+
+### Bug Fixes
+
+* **tournaments:** synchronize groups when changing sport ([7319882](https://github.com/HTL-Steyr/tourney/commit/7319882d6fd5f8270cb8d097cfc95c610474aa52))
+
 ## [0.43.1](https://github.com/HTL-Steyr/tourney/compare/v0.43.0...v0.43.1) (2026-10-13)
 
 
