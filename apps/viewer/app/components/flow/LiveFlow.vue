@@ -15,27 +15,35 @@ const { tournamentId } = defineProps<{
 }>()
 
 const { data: tournamentData, refresh } = await useFetch<TournamentPhases>(
-  `/api/tournaments/${tournamentId}/phases`,
+  () => `/api/tournaments/${tournamentId}/phases`,
 )
 
 const supabase = useSupabaseClient()
-supabase
-  .channel("channel-match")
-  .on(
-    "postgres_changes",
-    { event: "*", schema: "public", table: "match" },
-    async () => {
-      await refresh()
-    },
-  )
-  .on(
-    "postgres_changes",
-    { event: "*", schema: "public", table: "result" },
-    async () => {
-      await refresh()
-    },
-  )
-  .subscribe()
+const channelName = `viewer-bracket-${useId()}`
+let channel: ReturnType<typeof supabase.channel> | undefined
+onMounted(() => {
+  channel = supabase
+    .channel(channelName)
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "match" },
+      async () => {
+        await refresh()
+      },
+    )
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "result" },
+      async () => {
+        await refresh()
+      },
+    )
+    .subscribe()
+})
+
+onBeforeUnmount(() => {
+  if (channel) void supabase.removeChannel(channel)
+})
 
 const nodes = ref<Node[]>([])
 const edges = ref<Edge[]>([])
