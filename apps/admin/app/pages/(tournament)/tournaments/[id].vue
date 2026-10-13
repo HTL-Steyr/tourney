@@ -37,7 +37,7 @@ if (!tournament.value) {
     message: "Turnier nicht gefunden",
   })
 }
-const tournamentName = ref<string>(tournament.value?.name ?? "Turnier")
+const tournamentName = computed(() => tournament.value?.name ?? "Turnier")
 const { data, refresh: teamsRefresh } = await useFetch<TournamentTeamSummary>(
   `/api/tournaments/${tournament.value.id}/teams`,
 )
@@ -74,7 +74,7 @@ const waitingTeamsAlert = computed(() => {
   return `${data.value.waiting} ${data.value.waiting === 1 ? "Team ist" : "Teams sind"} angemeldet, aber aktuell nicht im Spielfeld.`
 })
 
-const links = [
+const links = computed(() => [
   {
     label: "Turniere",
     to: "/tournaments",
@@ -83,7 +83,7 @@ const links = [
     label: tournamentName.value,
     to: `/tournaments/${route.params.id}`,
   },
-]
+])
 
 const { data: groups, refresh: refreshGroups } = await useFetch(
   `/api/tournaments/${tournament.value.id}/groups`,
