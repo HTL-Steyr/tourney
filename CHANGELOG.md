@@ -1,3 +1,10 @@
+## [0.43.1](https://github.com/HTL-Steyr/tourney/compare/v0.43.0...v0.43.1) (2026-10-13)
+
+
+### Bug Fixes
+
+* **admin:** update tournament breadcrumb after editing name ([aaad44f](https://github.com/HTL-Steyr/tourney/commit/aaad44ffef9ba428dfc851b4b3a936901e4cc365))
+
 # [0.43.0](https://github.com/HTL-Steyr/tourney/compare/v0.42.0...v0.43.0) (2026-10-13)
 
 
