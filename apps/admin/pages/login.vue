@@ -21,10 +21,18 @@ const state = reactive({
   password: undefined,
 })
 
+const loginError = ref("")
 const { login } = useUser()
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-  const { data, error } = await login(state.email ?? "", state.password ?? "")
-  if (error) console.log(error)
+  loginError.value = ""
+  const { data, error } = await login(event.data.email, event.data.password)
+  if (error) {
+    loginError.value =
+      error.code === "invalid_credentials"
+        ? "E-Mail-Adresse oder Passwort ist falsch."
+        : "Die Anmeldung ist fehlgeschlagen. Bitte versuchen Sie es erneut."
+    return
+  }
   if (data.user) await navigateTo("/")
 }
 </script>
@@ -57,6 +65,12 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
         class="space-y-4"
         @submit="onSubmit"
       >
+        <UAlert
+          v-if="loginError"
+          color="red"
+          :title="loginError"
+          role="alert"
+        />
         <UFormGroup label="E-mail" name="email">
           <UInput v-model="state.email" />
         </UFormGroup>
