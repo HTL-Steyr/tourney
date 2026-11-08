@@ -13,6 +13,8 @@ export default defineEventHandler(async (event) => {
     .from("logo_variant")
     .select("*")
     .eq("logo_id", id)
+    .order("color")
+    .order("id")
 
   return data
 })
