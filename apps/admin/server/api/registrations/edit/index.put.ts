@@ -1,6 +1,6 @@
 export default defineEventHandler(async (event) => {
   const supabase = await useDatabase(event)
-  const { id, expire_date, allow_class_mixing } = await readBody<{
+  const { id, name, expire_date, allow_class_mixing } = await readBody<{
     id: string
     expire_date: string
     name: string
@@ -8,9 +8,13 @@ export default defineEventHandler(async (event) => {
     class: string
   }>(event)
 
+  if (typeof name !== "string" || !name.trim()) {
+    throw createError({ statusCode: 400, message: "Name is required" })
+  }
+
   const { error } = await supabase
     .from("registration")
-    .update({ expire_date, allow_class_mixing })
+    .update({ name: name.trim(), expire_date, allow_class_mixing })
     .eq("id", id)
 
   if (error) {
