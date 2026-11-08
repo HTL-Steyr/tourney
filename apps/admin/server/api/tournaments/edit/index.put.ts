@@ -8,7 +8,6 @@ type Body = {
     start_date: string
     from: string
     to: string
-    year: number
     sport: Enums<"sport_type">
     prizes: {
       first: string
@@ -45,12 +44,17 @@ export default defineEventHandler(async (event) => {
 
   const { error } = await supabase
     .from("tournament")
-    .update({ ...tournament, last_edited_by_id: user.id })
+    .update({
+      ...tournament,
+      year: Number(tournament.start_date.slice(0, 4)),
+      last_edited_by_id: user.id,
+    })
     .eq("id", id)
 
   if (error) {
     throw createError({
-      statusCode: 500,
+      statusCode: error.code === "23514" ? 409 : 500,
+      message: error.message,
       statusMessage: error.message,
     })
   }

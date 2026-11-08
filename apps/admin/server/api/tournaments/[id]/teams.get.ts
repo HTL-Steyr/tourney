@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
 
   const { data: teamsData, error: teamsError } = await supabase
     .from("team")
-    .select("id, registration_id, registration(status)")
+    .select("id, group_id, registration_id, registration(status)")
     .eq("tournament_id", id)
 
   if (teamsError) {
@@ -27,6 +27,8 @@ export default defineEventHandler(async (event) => {
     return {
       students: 0,
       teams: 0,
+      registered: 0,
+      waiting: 0,
       accepted: 0,
       pending: 0,
       rejected: 0,
@@ -49,6 +51,10 @@ export default defineEventHandler(async (event) => {
   )
   const studentCount = playersInTeams?.length || 0
 
+  const activeTeams = teamsData.filter((team) => team.group_id !== null)
+  const registered = teamsData.length
+  const waiting = registered - activeTeams.length
+
   const teamStatuses = teamsData.reduce(
     (acc, team) => {
       const status = team.registration?.status
@@ -62,7 +68,9 @@ export default defineEventHandler(async (event) => {
 
   return {
     students: studentCount,
-    teams: teamsData.length,
+    teams: activeTeams.length,
+    registered,
+    waiting,
     ...teamStatuses,
   } as TournamentTeamSummary
 })

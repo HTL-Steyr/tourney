@@ -13,7 +13,9 @@ export default defineEventHandler(async (event) => {
     .from("team")
     .select("*")
     .eq("registration_id", id)
-    .single()
+    .order("created_at", { ascending: true })
+    .limit(1)
+    .maybeSingle()
 
   return data
 })

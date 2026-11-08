@@ -1,18 +1,30 @@
-![tourney](./.github/assets/banner.png)
+![tourney](./.github/assets/preview-banner.jpg)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Version](https://img.shields.io/github/v/release/HTL-Steyr/tourney?color=blue)](https://github.com/HTL-Steyr/tourney/releases)
 [![Last Commit](https://img.shields.io/github/last-commit/HTL-Steyr/tourney)](https://github.com/HTL-Steyr/tourney/commits)
 
 [![Instagram](https://img.shields.io/badge/Instagram-E1306C?logo=instagram&logoColor=white)](https://www.instagram.com/htlsteyr/)
-![Website](https://img.shields.io/website?url=https%3A%2F%2Fwww.htl-steyr.ac.at&up_message=htl-steyr.ac.at&logo=google-chrome&logoColor=white)
+[![Website](https://img.shields.io/website?url=https%3A%2F%2Fwww.htl-steyr.ac.at&up_message=htl-steyr.ac.at&logo=google-chrome&logoColor=white)](https://www.htl-steyr.ac.at/)
 
-# tourney
+# Tourney
 
-Mono repository for the tourney project. This project is a web application for managing tournaments.
+Tourney is a comprehensive tournament management system designed to streamline the organization and execution of sports tournaments.
+It provides a user-friendly interface for administrators to set up and manage tournaments, while also offering a live viewer experience for spectators to stay updated on matches, brackets, and standings in real-time.
 
-It includes an admin dashboard for managing tournaments, teams/players, live scores, and a client app for tournament
-attendees.
+### Features
+
+- 🏆 Tournament setup for football, volleyball, and basketball with rules, prizes, and automatic group assignment
+- 📡 Live viewer with real-time updates on matches, brackets and standings
+- 🎓 Class and school year management
+- 🎟️ Central registration management with registration links, teams, pdf generation and status handling
+- 📰 News and gallery management directly from the admin dashboard
+- 🌳 Public tournament details, live brackets, standings, and media updates
+- 🤖 AI assistant
+
+### Live Deployment
+
+> https://tourney.dino-kupinic.dev
 
 ## ⏳ Activity
 
@@ -40,6 +52,9 @@ git clone https://github.com/Dino-Kupinic/tourney.git
 ./scripts/setup.sh
 ```
 
+> [!WARNING]
+> The setup script is due to be changed.
+
 > [!NOTE]
 > Windows users need WSL installed.
 
@@ -47,17 +62,24 @@ Requirements:
 
 - Docker
 - Bun
+- Node.js 22
 
 #### Manual Installation
 
 2. install packages
 
 ```bash
-bun i
+bun install
 ```
 
 > [!TIP]
 > If you don't have bun installed, checkout https://bun.sh to install for your operating system.
+
+3. optionally run all development servers
+
+```bash
+bun run dev
+```
 
 ### Backend
 
@@ -87,7 +109,8 @@ Copy the content into your `.env` and replace the following fields with your own
 | ------------------------ | ------------------------------------------------------ |
 | `SUPABASE_URL`           | URL to Supabase API                                    |
 | `SUPABASE_KEY`           | Anon key                                               |
-| `SUPABASE_SERVICE_KEY`   | Service Role Key                                       |
+| `SUPABASE_SECRET_KEY`    | Secret key (service-level key)                         |
+| `OPENAI_API_KEY`         | OpenAI API key for the admin AI assistant              |
 | `NUXT_PUBLIC_CLIENT_URL` | URL of the viewer app, default `http://localhost:3001` |
 
 2. run dev server
@@ -106,10 +129,13 @@ If it works, great!
 
 Create a `.env` file and checkout the `.env.example`. Copy the content into your `.env` and replace the following fields
 
-| Field          | Description         |
-| -------------- | ------------------- |
-| `SUPABASE_URL` | URL to Supabase API |
-| `SUPABASE_KEY` | Anon key            |
+| Field                     | Description                  |
+| ------------------------- | ---------------------------- |
+| `SUPABASE_URL`            | URL to Supabase API          |
+| `SUPABASE_KEY`            | Anon key                     |
+| `NUXT_GOTENBERG_URL`      | URL to the Gotenberg service |
+| `NUXT_GOTENBERG_USERNAME` | Gotenberg username           |
+| `NUXT_GOTENBERG_PASSWORD` | Gotenberg password           |
 
 2. run dev server
 
@@ -121,17 +147,41 @@ bun run dev:viewer
 
 If it works, great!
 
+#### Landing page (www)
+
+1. define environment variables
+
+Create a `.env` file and checkout the `.env.example`. Copy the content into your `.env` and replace the following fields
+
+| Field                              | Description           |
+| ---------------------------------- | --------------------- | --- |
+| `SUPABASE_URL`                     | URL to Supabase API   |
+| `SUPABASE_KEY`                     | Anon key              |
+| `NUXT_PUBLIC_ADMIN_APP_URL`        | URL of the admin app  |
+| `NUXT_PUBLIC_VIEWER_APP_URL`       | URL of the viewer app |
+| `NUXT_PUBLIC_MUX_DEMO_PLAYBACK_ID` | URL of mux asset id   |     |
+
+2. run dev server
+
+```bash
+bun run dev:www
+```
+
+3. Head to http://localhost:3002/
+
+If it works, great!
+
 #### User creator script
 
 1. define environment variables
 
 Create a `.env` file and checkout the `.env.example`. Copy the content into your `.env` and replace the following fields
 
-| Field             | Description                   |
-| ----------------- | ----------------------------- |
-| `SUPABASE_URL`    | URL to Supabase API           |
-| `SUPABASE_KEY`    | Anon key                      |
-| `USERS_TO_CREATE` | See comment in `.env.example` |
+| Field                 | Description                    |
+| --------------------- | ------------------------------ |
+| `SUPABASE_URL`        | URL to Supabase API            |
+| `SUPABASE_SECRET_KEY` | Secret key (service-level key) |
+| `USERS_TO_CREATE`     | See comment in `.env.example`  |
 
 2. run the script
 
@@ -141,52 +191,21 @@ bun run create:users
 
 If it works, great! You can now log in in the admin dashboard with the created users.
 
-## 🚀 Deployment
-
-1. build the app
-
-```bash
-bun run build
-```
-
-> [!CAUTION]
-> The following section will be deprecated in the future!
-
-2. start the app
-
-```bash
-bun run app:start
-```
-
-> [!TIP]
-> Didn't work?
-> Try installing pm2 globally with `npm install pm2 -g`.
-> For npm you need to install Node.js.
-
-3. monitor the app
-
-```bash
-bun run app:monitor
-```
-
-4. enjoy the app!
-
 ## 😄 Authors
 
 ### Creator
 
 - [@Dino Kupinic](https://www.github.com/Dino-Kupinic)
 
-### Core Maintainer
-
-- [@Leon Arbeithuber](https://github.com/larbeith)
-
 ## 🛠️ Tech Stack
 
-- Nuxt 3
+- Bun
+- Turbo
+- Nuxt 4
 - Supabase
 - Docker
-- pm2
+- OpenAI API
+- Gotenberg
 
 ## Contributing
 

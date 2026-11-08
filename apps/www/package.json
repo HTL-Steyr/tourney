@@ -1,0 +1,28 @@
+{
+  "name": "@tourney/www",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "dev:host": "nuxt dev --host",
+    "analyze": "nuxi analyze",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "start": "bun run ./.output/server/index.mjs",
+    "format": "prettier . --check",
+    "format:write": "prettier . --write",
+    "check-types": "vue-tsc --noEmit"
+  },
+  "engines": {
+    "node": "22"
+  },
+  "dependencies": {
+    "@iconify-json/heroicons": "catalog:ui",
+    "@mux/mux-player": "catalog:ui",
+    "nuxt": "catalog:framework",
+    "vue": "catalog:framework",
+    "vue-router": "catalog:framework"
+  }
+}

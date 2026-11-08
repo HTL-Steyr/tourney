@@ -4,9 +4,12 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "create": "node --env-file=.env ./index.js"
+    "create": "node --env-file=.env ./index.js",
+    "fill:tournament": "bun ./fill-tournament.js",
+    "format": "prettier . --check",
+    "format:write": "prettier . --write"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.53.0"
+    "@supabase/supabase-js": "catalog:data"
   }
 }

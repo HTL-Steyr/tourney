@@ -13,6 +13,7 @@ export default defineEventHandler(async (event) => {
     .from("team")
     .select("id, group_id")
     .eq("tournament_id", id)
+    .not("group_id", "is", null)
 
   if (teamError) {
     throw createError({
@@ -50,7 +51,7 @@ export default defineEventHandler(async (event) => {
   const shuffledTeams = [...teams].sort(() => Math.random() - 0.5)
   const updatedTeams = shuffledTeams.map((team, index) => ({
     id: team.id,
-    group_id: groups[index % groups.length].id,
+    group_id: groups[index % groups.length]!.id,
   }))
 
   const updates = updatedTeams.map((team) =>

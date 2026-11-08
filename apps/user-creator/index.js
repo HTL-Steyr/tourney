@@ -1,9 +1,14 @@
 import { createClient } from "@supabase/supabase-js"
 
 const supabaseUrl = process.env.SUPABASE_URL
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY
+const supabaseSecretKey =
+  process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_KEY
 
-const supabase = createClient(supabaseUrl, supabaseServiceKey)
+if (!supabaseUrl || !supabaseSecretKey) {
+  throw new Error("Missing SUPABASE_URL or SUPABASE_SECRET_KEY in environment")
+}
+
+const supabase = createClient(supabaseUrl, supabaseSecretKey)
 
 async function createUser(email, password, role) {
   const { data, error } = await supabase.auth.admin.createUser({

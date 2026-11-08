@@ -44,6 +44,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const formattedData = groups.map((group) => ({
+    id: group.id,
     name: group.name,
     teams: teams.filter((team) => team.group_id === group.id),
   }))

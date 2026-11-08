@@ -12,7 +12,7 @@
   },
   "types": "./dist/index.d.ts",
   "devDependencies": {
-    "@types/node": "24.0.4",
-    "typescript": "^5.9.2"
+    "@types/node": "catalog:typescript",
+    "typescript": "catalog:typescript"
   }
 }

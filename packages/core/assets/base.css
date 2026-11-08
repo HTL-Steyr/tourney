@@ -1,6 +1,17 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+/* Tailwind v4 source detection needs explicit app sources when styles live in a shared layer package. */
+@source "..";
+@source "../../../apps/admin";
+@source "../../../apps/viewer";
+
+@theme {
+  --font-sans: "Inter", -apple-system, "Segoe UI", Arial, sans-serif;
+  --font-mono:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Courier New", monospace;
+}
 
 @layer base {
   body {

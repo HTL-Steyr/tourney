@@ -1,17 +1,23 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   extends: ["../../packages/core"],
+  srcDir: "app",
   compatibilityDate: "2025-07-28",
   devtools: { enabled: true },
+  runtimeConfig: {
+    gotenbergUrl: "",
+    gotenbergUsername: "",
+    gotenbergPassword: "",
+  },
   modules: [
     "@nuxtjs/device",
     "@vueuse/nuxt",
-    "@nuxtjs/supabase",
     "@vite-pwa/nuxt",
-    "@nuxt/content",
+    "@nuxt/scripts",
   ],
   supabase: {
     redirect: false,
+    types: "~~/types/database.types.ts",
   },
   nitro: {
     serverAssets: [
@@ -20,7 +26,6 @@ export default defineNuxtConfig({
         dir: "./templates",
       },
     ],
-    preset: "bun",
   },
   devServer: {
     port: 3001,
@@ -31,11 +36,6 @@ export default defineNuxtConfig({
       pathPrefix: false,
     },
   ],
-  content: {
-    markdown: {
-      anchorLinks: false,
-    },
-  },
   pwa: {
     manifest: {
       name: "tourney",
@@ -72,4 +72,4 @@ export default defineNuxtConfig({
       ],
     },
   },
-})
+} as any)

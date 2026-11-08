@@ -19,3 +19,7 @@ node_modules
 docs/.vitepress/cache
 .turbo
 dist
+
+# Supabase
+**/supabase/.branches
+**/supabase/.temp
