@@ -38,13 +38,21 @@ const fields: AuthFormField[] = [
   },
 ]
 
+const loginError = ref("")
 const { login } = useUser()
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
+  loginError.value = ""
   const { data, error } = await login(
     event.data.email ?? "",
     event.data.password ?? "",
   )
-  if (error) console.error(error)
+  if (error) {
+    loginError.value =
+      error.code === "invalid_credentials"
+        ? "E-Mail-Adresse oder Passwort ist falsch."
+        : "Die Anmeldung ist fehlgeschlagen. Bitte versuchen Sie es erneut."
+    return
+  }
   if (data.user) await navigateTo("/")
 }
 </script>
@@ -70,6 +78,13 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
         <div
           class="w-full max-w-md rounded-2xl border border-neutral-200 bg-white p-8 sm:p-10 dark:border-neutral-800 dark:bg-neutral-900"
         >
+          <UAlert
+            v-if="loginError"
+            color="error"
+            :title="loginError"
+            role="alert"
+            class="mb-4"
+          />
           <UAuthForm
             :schema="schema"
             :fields="fields"

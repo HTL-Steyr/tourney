@@ -286,7 +286,7 @@ const onCopyLink = async (row: RegistrationColumn) => {
 const editSchema = z.object({
   id: z.string(),
   expire_date: z.string().date(),
-  name: z.string(),
+  name: z.string().trim().min(1, "Name ist erforderlich"),
   allow_class_mixing: z.boolean(),
   class: z.string(),
 })
@@ -325,10 +325,10 @@ const onInfo = async (row: RegistrationColumn) => {
 
 const onSubmitEdit = async () => {
   try {
-    editSchema.parse(editState)
+    const values = editSchema.parse(editState)
     await $fetch("/api/registrations/edit", {
       method: "PUT",
-      body: editState,
+      body: values,
     })
     isOpenEdit.value = false
     await refresh()
@@ -840,9 +840,13 @@ const onSubmitCreate = async () => {
           class="space-y-4"
           @submit="onSubmitEdit"
         >
+          <UFormField label="Name" name="name">
+            <UInput v-model="editState.name" class="w-full" />
+          </UFormField>
+
           <UFormField
             label="Ablaufdatum"
-            name="date"
+            name="expire_date"
             description="An diesem Datum wird die Anmeldung automatisch geschlossen."
           >
             <UInput
