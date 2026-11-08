@@ -18,7 +18,6 @@ type Body = {
     }
     thumbnail_path: string
     location: string
-    last_edited_by_id: string
     groups: number
     group_teams: number
     knockout_interval: number
@@ -27,6 +26,14 @@ type Body = {
 
 export default defineEventHandler(async (event) => {
   const supabase = await useDatabase(event)
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser()
+  if (authError || !user) {
+    throw createError({ statusCode: 401, statusMessage: "Unauthorized" })
+  }
+
   const { id, tournament } = await readBody<Body>(event)
 
   if (!id || !tournament) {
@@ -38,7 +45,7 @@ export default defineEventHandler(async (event) => {
 
   const { error } = await supabase
     .from("tournament")
-    .update(tournament)
+    .update({ ...tournament, last_edited_by_id: user.id })
     .eq("id", id)
 
   if (error) {
